@@ -1,6 +1,5 @@
 var GameOfLife = (function (undefined) {
 
-
     var CELL_MARGIN = 3;
     var CELL_SIZE = 6;
 
@@ -55,6 +54,39 @@ var GameOfLife = (function (undefined) {
         };
 
         init();
+    }
+
+    function Cell(row, col) {
+        var alive = true;
+
+        this.isAlive = function() {
+            return alive;
+        };
+
+        this.toggleState = function() {
+            alive = !alive;
+        };
+
+        this.kill = function() {
+            alive = false;
+        };
+
+        this.revive = function() {
+            alive = true;
+        };
+
+        this.getNeighborPositions = function() {
+            //Top first, clockwise
+            return [ {row: row - 1, col: col},
+                {row: row - 1, col: col + 1},
+                {row: row, col: col + 1},
+                {row: row + 1, col: col + 1},
+                {row: row + 1, col: col},
+                {row: row + 1, col: col - 1},
+                {row: row, col: col - 1},
+                {row: row - 1, col: col - 1} ];
+        };
+
     }
 
     return GameOfLife;
