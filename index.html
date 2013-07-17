@@ -4,16 +4,19 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>Conway's Game of Life</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
+        <style>
+            * {margin: 0; padding: 0;}
+            body {margin: 20px;}
+            /*canvas {border: 1px solid blue;}*/
+        </style>
     </head>
     <body>
-        
         <canvas id="game"></canvas>
-        
+
         <script src="js/GameOfLife.js"></script>
         <script>
-            
+            var gol = new GameOfLife(document.querySelector("#game"), 50); // 50x50 grid
+            gol.start();
         </script>
     </body>
 </html>
