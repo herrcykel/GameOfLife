@@ -1,15 +1,17 @@
 var GameOfLife = (function (undefined) {
 
-    var CELL_MARGIN = 1;
-    var CELL_SIZE = 8;
+    var CELL_MARGIN = 2;
+    var CELL_SIZE = 7;
+
+    var DEFAULT_DELAY = 250;
 
     var BACKGROUND_COLOR = "#FFFFFF";
     var CELL_COLOR = "#000000";
-    var GRID_COLOR = "#CCCCCC";
+    var GRID_COLOR = "#FFFFFF";
 
     function GameOfLife(canvas, gridSize, delay) {
 
-        delay = delay || 500;
+        delay = delay || DEFAULT_DELAY;
 
         var interval = null;
 
@@ -23,7 +25,27 @@ var GameOfLife = (function (undefined) {
         };
 
         var update = function() {
-
+            var nextGen = [];
+            cells.forEach(function(col) {
+                var newRow = [];
+                col.forEach(function(cell) {
+                    var newCell = new Cell(cell.getRow(), cell.getCol());
+                    var aliveNeighborsCount = getAliveNeighborsCount(cell);
+                    if(cell.isAlive()) {
+                        if(aliveNeighborsCount < 2 || aliveNeighborsCount > 3) {
+                            newCell.kill(); // Under-population or overcrowding
+                        }
+                    }
+                    else {
+                        if(aliveNeighborsCount !== 3) {
+                            newCell.kill(); // Only exactly 3 neighbors can revive a dead cell.
+                        }
+                    }
+                    newRow.push(newCell);
+                });
+                nextGen.push(newRow);
+            });
+            cells = nextGen;
         };
 
         var draw = function() {
@@ -47,12 +69,24 @@ var GameOfLife = (function (undefined) {
         };
 
         var isOutOfBounds = function(pos) {
-            return pos.row >= 0 && pos.col >= 0 && pos.row < canvas.height && pos.col < canvas.width;
+            return pos.row < 0 || pos.col < 0 || pos.row >= gridSize || pos.col >= gridSize;
+        };
+
+        var getAliveNeighborsCount = function(cell) {
+            var count = 0;
+            cell.getNeighborsPositions().forEach(function(pos) {
+                if(!isOutOfBounds(pos)) {
+                    if(cells[pos.row][pos.col].isAlive()) {
+                        count++;
+                    }
+                }
+            });
+            return count;
         };
 
         this.isRunning = function() {
             return interval !== null;
-        }
+        };
 
         this.start = function() {
             if(interval === null) {
@@ -74,9 +108,10 @@ var GameOfLife = (function (undefined) {
         };
 
         this.randomize = function() {
-            for(var i = 0; i < gridSize;i++) {
+            cells = [];
+            for(var i = 0; i < gridSize; i++) {
                 var row = [];
-                for(var j = 0; j < gridSize;j++) {
+                for(var j = 0; j < gridSize; j++) {
                     var cell = new Cell(i, j);
                     if(Math.random() > 0.1) { // Kill ~90%
                         cell.kill();
@@ -109,7 +144,7 @@ var GameOfLife = (function (undefined) {
             alive = true;
         };
 
-        this.getNeighborPositions = function() {
+        this.getNeighborsPositions = function() {
             //Top first, clockwise
             return [ {row: row - 1, col: col},
                 {row: row - 1, col: col + 1},
@@ -119,6 +154,14 @@ var GameOfLife = (function (undefined) {
                 {row: row + 1, col: col - 1},
                 {row: row, col: col - 1},
                 {row: row - 1, col: col - 1} ];
+        };
+
+        this.getRow = function() {
+            return row;
+        };
+
+        this.getCol = function() {
+            return col;
         };
 
     }
