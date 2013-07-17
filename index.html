@@ -7,6 +7,9 @@
         <style>
             * {margin: 0; padding: 0;}
             body {margin: 20px;}
+            #game {
+                border: 1px solid black;
+            }
         </style>
     </head>
     <body>
@@ -14,7 +17,8 @@
 
         <script src="js/GameOfLife.js"></script>
         <script>
-            var gol = new GameOfLife(document.querySelector("#game"), 50); // 50x50 grid
+            var gol = new GameOfLife(document.querySelector("#game"), 75); // 50x50 grid
+            gol.randomize();
             gol.start();
         </script>
     </body>
