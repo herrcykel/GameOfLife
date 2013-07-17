@@ -20,7 +20,7 @@ var GameOfLife = (function (undefined) {
 
 
         var init = function() {
-            canvas.width = canvas.height = gridSize * CELL_SIZE + (gridSize + 1) * CELL_MARGIN;
+            canvas.width = canvas.height = CELL_SIZE * gridSize + CELL_MARGIN * (gridSize - 1);
         };
 
         var update = function() {
@@ -50,7 +50,17 @@ var GameOfLife = (function (undefined) {
         };
 
         this.randomize = function() {
-
+            for(var i = 0; i < gridSize;i++) {
+                var row = [];
+                for(var j = 0; j < gridSize;j++) {
+                    var cell = new Cell(i, j);
+                    if(Math.random() > 0.25) { // Kill ~75%
+                        cell.kill();
+                    }
+                    row.push(cell);
+                }
+                cells.push(row);
+            }
         };
 
         init();
