@@ -14,13 +14,13 @@ var GameOfLife = (function (undefined) {
 
         var interval = null;
 
-        var self = this;
         var cells = [];
         var ctx = canvas.getContext("2d");
 
 
         var init = function() {
             canvas.width = canvas.height = CELL_SIZE * gridSize + CELL_MARGIN * (gridSize - 1);
+            this.reset();
         };
 
         var update = function() {
@@ -103,6 +103,20 @@ var GameOfLife = (function (undefined) {
             }
         };
 
+        this.reset = function() {
+            this.stop();
+            cells = [];
+            for(var i = 0; i < gridSize; i++) {
+                var row = [];
+                for(var j = 0; j < gridSize; j++) {
+                    var cell = new Cell(i, j);
+                    cell.kill();
+                    row.push(cell);
+                }
+                cells.push(row);
+            }
+        };
+
         this.randomize = function() {
             cells = [];
             for(var i = 0; i < gridSize; i++) {
@@ -118,7 +132,7 @@ var GameOfLife = (function (undefined) {
             }
         };
 
-        init();
+        init.apply(this);
     }
 
     function Cell(row, col) {
