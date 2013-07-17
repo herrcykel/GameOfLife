@@ -7,7 +7,6 @@ var GameOfLife = (function (undefined) {
 
     var BACKGROUND_COLOR = "#FFFFFF";
     var CELL_COLOR = "#000000";
-    var GRID_COLOR = "#FFFFFF";
 
     function GameOfLife(canvas, gridSize, delay) {
 
@@ -49,18 +48,15 @@ var GameOfLife = (function (undefined) {
         };
 
         var draw = function() {
-            ctx.fillStyle = GRID_COLOR;
+            ctx.fillStyle = BACKGROUND_COLOR;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             var curX = 0, curY = 0;
             cells.forEach(function(col) {
                 col.forEach(function(cell) {
                     if(cell.isAlive()) {
                         ctx.fillStyle = CELL_COLOR;
+                        ctx.fillRect(curX, curY, CELL_SIZE, CELL_SIZE);
                     }
-                    else {
-                        ctx.fillStyle = BACKGROUND_COLOR;
-                    }
-                    ctx.fillRect(curX, curY, CELL_SIZE, CELL_SIZE);
                     curX += CELL_SIZE + CELL_MARGIN;
                 });
                 curX = 0;
