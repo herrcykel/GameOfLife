@@ -115,6 +115,9 @@ var GameOfLife = (function (undefined) {
                 }
                 cells.push(row);
             }
+            if(!this.isRunning()) {
+                draw();
+            }
         };
 
         this.randomize = function() {
@@ -129,6 +132,9 @@ var GameOfLife = (function (undefined) {
                     row.push(cell);
                 }
                 cells.push(row);
+            }
+            if(!this.isRunning()) {
+                draw();
             }
         };
 

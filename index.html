@@ -10,16 +10,37 @@
             #game {
                 border: 1px solid black;
             }
+            #controls button {
+                margin: 5px;
+                padding: 3px;
+            }
         </style>
     </head>
     <body>
         <canvas id="game"></canvas>
-
+        <div id="controls">
+            <button id="start">Start</button>
+            <button id="stop">Stop</button>
+            <button id="randomize">Randomize</button>
+            <button id="clear">Clear</button>
+        </div>
         <script src="js/GameOfLife.js"></script>
         <script>
+            var $$ = function(s) {return document.querySelector(s);};
             var gol = new GameOfLife(document.querySelector("#game"), 75, 150); // 100x100 grid, 150 ms delay
+            $$("#start").addEventListener("click", function() {
+                gol.start();
+            }, false);
+            $$("#stop").addEventListener("click", function() {
+                gol.stop();
+            }, false);
+            $$("#randomize").addEventListener("click", function() {
+                gol.randomize();
+            }, false);
+            $$("#clear").addEventListener("click", function() {
+                gol.reset();
+            }, false);
             gol.randomize();
-            gol.start();
         </script>
     </body>
 </html>
