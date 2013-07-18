@@ -18,11 +18,38 @@ var GameOfLife = (function (undefined) {
 
         var cells = [];
         var ctx = canvas.getContext("2d");
-
+        var isMouseDown = false;
+        var allowPaint = true;
 
         var init = function() {
             canvas.width = canvas.height = CELL_SIZE * gridSize + CELL_MARGIN * (gridSize - 1);
+            setupEvents.apply(this);
             this.reset();
+        };
+
+        var setupEvents = function() {
+            var self = this;
+            var paintFunc = function(e) {
+                if(allowPaint && (isMouseDown || e.type === "click") && !self.isRunning()) {
+                    
+                }
+            };
+            canvas.addEventListener("click", paintFunc, false);
+
+            canvas.addEventListener("mousemove", paintFunc, false);
+
+            canvas.addEventListener("mousedown", function() {
+                isMouseDown = true;
+            }, false);
+
+            canvas.addEventListener("mouseup", function() {
+                isMouseDown = false;
+            }, false);
+
+            canvas.addEventListener("mouseout", function() {
+                isMouseDown = false;
+            }, false);
+
         };
 
         var update = function() {
