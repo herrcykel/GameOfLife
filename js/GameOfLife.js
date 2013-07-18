@@ -31,7 +31,25 @@ var GameOfLife = (function (undefined) {
             var self = this;
             var paintFunc = function(e) {
                 if(allowPaint && (isMouseDown || e.type === "click") && !self.isRunning()) {
-                    
+                    // Ugh...
+                    (function() {
+                        for(var i = 0;i < cells.length;i++) {
+                            for(var j = 0;j < cells[i].length;j++) {
+                                var cell = cells[i][j];
+                                //console.log(cell.getRow() + ":" + cell.getCol());
+                                if(cell.hitTest(e.offsetX, e.offsetY)) {
+                                    if(e.shiftKey) {
+                                        cell.kill();
+                                    }
+                                    else {
+                                        cell.revive();
+                                    }
+                                    return;
+                                }
+                            }
+                        }
+                    }());
+                    draw();
                 }
             };
             canvas.addEventListener("click", paintFunc, false);
@@ -172,6 +190,10 @@ var GameOfLife = (function (undefined) {
 
     function Cell(row, col) {
         var alive = true;
+        var pixelPos = {};
+        pixelPos.x = col * CELL_SIZE + col * CELL_MARGIN;
+        pixelPos.y = row * CELL_SIZE + row * CELL_MARGIN;
+
 
         this.isAlive = function() {
             return alive;
@@ -187,6 +209,21 @@ var GameOfLife = (function (undefined) {
 
         this.revive = function() {
             alive = true;
+        };
+
+        this.hitTest = function(x, y) {
+            var hit = false;
+            for(;;) {
+                if(x < pixelPos.x || x > pixelPos.x + CELL_SIZE) {
+                    break;
+                }
+                if(y < pixelPos.y || y > pixelPos.y + CELL_SIZE) {
+                    break;
+                }
+                hit = true;
+                break;
+            }
+            return hit;
         };
 
         this.getNeighborsPositions = function() {
