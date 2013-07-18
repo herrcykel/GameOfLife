@@ -4,6 +4,7 @@ var GameOfLife = (function (undefined) {
     var CELL_SIZE = 7;
 
     var DEFAULT_DELAY = 250;
+    var DEFAULT_GRID_SIZE = 40;
 
     var BACKGROUND_COLOR = "#FFFFFF";
     var CELL_COLOR = "#000000";
@@ -11,6 +12,7 @@ var GameOfLife = (function (undefined) {
     function GameOfLife(canvas, gridSize, delay) {
 
         delay = delay || DEFAULT_DELAY;
+        gridSize = gridSize || DEFAULT_GRID_SIZE;
 
         var interval = null;
 
