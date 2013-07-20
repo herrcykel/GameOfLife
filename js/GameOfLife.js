@@ -105,14 +105,19 @@ var GameOfLife = (function (undefined) {
             }
         };
 
-        this.reset = function() {
+        this.reset = function(cellFunc) {
             this.stop();
             cells = [];
             for(var i = 0; i < gridSize; i++) {
                 var row = [];
                 for(var j = 0; j < gridSize; j++) {
                     var cell = new Cell(i, j);
-                    cell.kill();
+                    if(cellFunc && typeof(cellFunc) === "function") {
+                        cellFunc(cell);
+                    }
+                    else {
+                        cell.kill();
+                    }
                     row.push(cell);
                 }
                 cells.push(row);
@@ -123,21 +128,11 @@ var GameOfLife = (function (undefined) {
         };
 
         this.randomize = function() {
-            cells = [];
-            for(var i = 0; i < gridSize; i++) {
-                var row = [];
-                for(var j = 0; j < gridSize; j++) {
-                    var cell = new Cell(i, j);
-                    if(Math.random() > 0.1) { // Kill ~90%
-                        cell.kill();
-                    }
-                    row.push(cell);
+            this.reset(function(cell) {
+                if(Math.random() > 0.1) { // Kill ~90%
+                    cell.kill();
                 }
-                cells.push(row);
-            }
-            if(!this.isRunning()) {
-                draw();
-            }
+            });
         };
 
         init.apply(this);
